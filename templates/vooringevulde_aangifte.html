@@ -1,0 +1,165 @@
+<style>
+body {
+    display: flex;
+    flex-direction: column;
+    height: 100vh;
+    margin: 0;
+    font-family: Arial, sans-serif;
+    background-color: #f4f4f4;
+  }
+  header {
+    background-color: #ffffffde;
+    padding: 0px 0;
+    text-align: center;
+  }
+  .main-header {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    flex-direction: column;
+  }
+  .logo-img-header {
+    height: 107.1px;
+    width: auto;
+    margin-left: 100px;
+  }
+  .menu-bar span {
+    font-size: 14px;
+    font-style: italic;
+    font-weight: normal;
+    margin-left: 5px;  
+  }
+
+  main {
+    flex: 1;
+    padding: 20px;
+  }
+
+  .main-container {
+    width: 80%;
+    margin-left: auto;
+    margin-right: auto;
+  }
+  
+  .label-va {
+    width: 900px;
+    display: inline-block;
+    padding-inline: 0;
+    margin-left: 50px;
+  }
+
+  .input-va {
+    box-sizing: border-box;
+    border: 2px solid lightgray;
+    border-radius: 2px;
+    width: 150px;
+  }
+
+  button {
+    border: 1px solid #8fcae7;
+    background-color:#8fcae7;
+    border-radius: 0px;
+    color: #ffff;
+    height: 25px;
+    text-align: justify;
+    font-style: italic;
+    cursor: pointer;
+  }
+
+  button:hover {
+    border: #154273;
+    background-color: #154273;
+    font-weight: 600;
+  }
+
+  footer {
+    background-color: #ffffffde;
+    color: #343a40;
+    padding: 0;
+    margin: 0;
+    text-align: center;
+    position: relative;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+  }
+
+  .logo-img-footer {
+    width: 50px;
+    height: auto;
+  }
+
+</style>
+<header class="main-header">
+    <div style="display: flex; align-items: center; padding-top: 0; padding-bottom: 20px; margin-left: 10px;">
+      <img class="logo-img-header" src="{{ url_for('static', filename='Logo_rijksoverheid.svg.png') }}" alt="Logo Rijksoverheid">
+      <p style="margin-left: 10px; font-size: 14px; font-family: 'Times New Roman', Times, serif, sans-serif; margin-top: 60px; text-align: left;">Master Thesis <br>Benjamin Mertens</p>
+    </div>
+  </header>
+  
+  <main style="background-color: #ffffffde;">
+    <div>
+        <form action="{{ url_for('verberg_vooringevulde_aangifte') }}" method="post">
+          <button type="submit" class="btn btn-primary">Verberg Vooringevulde Aangifte</button>
+        </form><br>
+        <p>Hieronder is een vereenvoudigde versie van de vooringevulde aangifte opgenomen die de belastingplichtige te zien zal krijgen. Dit is slechts indicatief om te laten zien wat er mogelijk is. 
+          De winst- en verliesrekening laat het resultaat zien dat via de transacties bereikt is. Daaronder kan aangegeven worden of er nog sprake is van overige posten die niet van de transacties kunnen worden afgeleid. 
+          Eventueel zouden deze ook door vooringevuld kunnen worden met behulp van SAF-T.</p>
+    
+        <h3>Winst- en verliesrekening V.D. PASCH B.V.</h3>
+        <h5 style='font-style: italic; font-weight: 400;'>Bedragen in euro</h5>
+
+        <label class="label-va" for="totale_opbrengsten">Totale opbrengsten op basis van uw digitale transacties:</label>
+        <input class="input-va" style="align-items: center;" type="text" id="totale_opbrengsten" name="totale_opbrengsten" value="{{ totale_inkomsten  | round(2, 'common') }}"><br>
+        <label class="label-va" for="uitbesteed_kosten">Totale kosten op basis van uw digitale transacties:</label>
+        <input class="input-va" style="align-items: center;" type="text" id="uitbesteed_kosten" name="uitbesteed_kosten" value="{{ totale_uitgaven  | round(2, 'common') }}"><br>
+        <label class="label-va" for="saldo"><b>Resultaat:</b></label>
+        <input class="input-va" style="align-items: center; font-weight: bold;" type="text" id="saldo" name="saldo" value="{{ (totale_inkomsten - totale_uitgaven) | round(2, 'common') }}" readonly><br>
+        <br>
+
+        <h3>Gelieve onderstaande gegevens verder aan te vullen</h3>
+        <h4>Kapitaalstortingen en onttrekkingen</h4>
+        <label class="label-va" for="kapitaalstortingen">Kapitaalstortingen: </label>
+        <input class="input-va" type="text" id="kapitaalstortingen" name="kapitaalstortingen" value="{{ totale_waarde_stortingen | round(2, 'common') }}">
+        <br><label class="label-va" for="onttrekkingen">Onttrekkingen</label>
+        <input class="input-va" type="text" id="onttrekkingen" name="onttrekkingen" value="{{ totale_waarde_onttrekkingen | round(2, 'common') }}">
+        
+        <h4>Innovatiebox</h4>
+        <label class="label-va" for="innovatiebox">Maakt u gebruik van de Innovatiebox?</label>
+        <input class="input-va" type="text" id="innovatiebox" name="innovatiebox" value="0,00">
+
+        <h4>Deelnemingsvrijstelling</h4>
+        <label class="label-va" for="deelnemingsvrijstelling">Heeft u in dit jaar een winstuitkering gekregen waarop de deelnemingsvrijstelling van toepassing is?</label>
+        <input class="input-va" type="text" id="deelnemingsvrijstelling" name="deelnemingsvrijstelling" value="0,00">
+    
+        <h4>Renteaftrekbeperkingen</h4>
+        <label class="label-va" for="renteaftrekbeperkingen">Heeft u in dit jaar rente betaald waarop de renteaftrekbeperking van toepassing is?</label>
+        <input class="input-va" type="text" id="renteaftrekbeperkingen" name="renteaftrekbeperkingen" value="0,00" >
+
+        <h4>Afwaarderingen</h4>
+        <label class="label-va" for="afwaarderingen">Heeft u in dit jaar een vordering afgewaardeerd?</label>
+        <input class="input-va"" type="text" id="afwaarderingen" name="afwaarderingen" value="0,00" >
+
+        <h4>Verrekenbare verliezen</h4>
+        <label class="label-va" for="verrekenbare_verliezen">Heeft u verrekenbare verliezen uit voorgaande jaren?</label>
+        <input class="input-va" type="text" id="verrekenbare_verliezen" name="verrekenbare_verliezen" value="0,00" >
+
+        <h4>Reserves</h4>
+        <label class="label-va" for="reserves">Heeft u dit jaar reserves gevormd?</label>
+        <input class="input-va" type="text" id="reserves" name="reserves" value="0,00" >
+
+        <h3>Belastbaar bedrag</h3>
+        <label class="label-va" for="belastbaar_bedrag"><b>Belastbaar bedrag 2023</b></label>
+        <input class="input-va" style="align-items: center; font-weight: bold;" type="text" id="belastbaar_bedrag" name="belastbaar_bedrag" value="{{ (saldo + totale_waarde_onttrekkingen - innovatiebox - deelnemingsvrijstelling - renteaftrekbeperkingen - afwaarderingen - verrekenbare_verliezen - reserves) | round(2, 'common') }}" readonly>
+    </div>  
+</main>
+
+<footer>
+    <p style="font-size: 10px; color: #414950; font-style: italic;">Aangifte vennootschapsbelasting 2023</p>
+    <div style="width: 100%; display: flex; justify-content: center; align-items: center; padding-bottom: 0; margin: 0;">
+      <img class="logo-img-footer" src="{{ url_for('static', filename='Logo_onder_rijksoverheid.svg.png') }}" alt="Logo Rijksoverheid">
+    </div>
+  </footer>
+</body>
+</html>

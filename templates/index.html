@@ -1,0 +1,547 @@
+<!DOCTYPE html>
+<html>
+<head>
+<title>PAPER - TAX AND TECHNOLOGY 2</title>
+<style>
+  body {
+    display: flex;
+    flex-direction: column;
+    height: 100vh;
+    margin: 0;
+    font-family: Arial, sans-serif;
+    background-color: #f4f4f4;
+  }
+  header {
+    background-color: #fff;
+    padding: 0px 0;
+    text-align: center;
+  }
+  .main-header {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    flex-direction: column;
+  }
+  .logo-img-header {
+    height: 107.1px;
+    width: auto;
+    margin-left: 100px;
+  }
+  .menu-bar {
+    background-color: #8fcae7;
+    color: #000;
+    padding: 20px 50px;
+    text-align: center;
+    font-size: 18px;
+    font-weight: bold;
+  }
+  .menu-bar h3 {
+    font-size: 16px;
+    margin: 0;
+  }
+  .menu-bar span {
+    font-size: 14px;
+    font-style: italic;
+    font-weight: normal;
+    margin-left: 5px;  
+  }
+
+  main {
+    flex: 1;
+    padding: 20px;
+  }
+
+  input {
+    border: none;
+    background-color: #fff;
+    border-bottom: 1px solid lightgray;
+    border-radius: 1px;
+  }
+
+  select {
+    border: none;
+    background-color: #fff;
+    border-bottom: 1px solid lightgray;
+    border-radius: 1px;    
+  }
+
+  button {
+    border: 1px solid #8fcae7;
+    background-color:#8fcae7;
+    border-radius: 0px;
+    color: #ffff;
+    height: 25px;
+    text-align: justify;
+    font-style: italic;
+    cursor: pointer;
+  }
+
+  button:hover {
+    border: #154273;
+    background-color: #154273;
+    font-weight: 600;
+  }
+
+  footer {
+    background-color: #fff;
+    color: #343a40;
+    padding: 0;
+    margin: 0;
+    text-align: center;
+    position: relative;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+  }
+
+  .logo-img-footer {
+    width: 50px;
+    height: auto;
+  }
+
+  .container {
+    display: flex;
+    flex-direction: row;
+    width: 100%;
+  }
+  .upper-box, .lower-box {
+    border: 1px solid black;
+    padding: 10px;
+    margin: 10px;
+    box-sizing: border-box;
+    flex: 1;  
+    margin-left: 10px;  
+    margin-right: 10px;
+    box-shadow: 0 4px 4px 0 #0000000c;  
+  }
+  .upper-box {
+    border: 1px solid #eef7fb; 
+    background-color: #eef7fb; 
+  }
+  .lower-box {
+    border: 1px solid #eef7fb; 
+    background-color: #eef7fb;
+  }
+  .column {
+    display: flex;
+    flex-direction: column;
+  }
+  .form-and-result-container {
+    display: flex;
+    justify-content: space-between;
+  }
+  .form-container {
+    flex: 1;
+    margin: 10px;
+    padding: 10px;
+    border: 1px solid #eef7fb; 
+    background-color: #eef7fb; 
+  }
+
+  .result-container {
+    flex: 1;
+    margin: 10px;
+    padding: 10px;
+    border: 1px solid #eef7fb; 
+    background-color: #eef7fb;
+    border-radius: 2px;
+  }
+
+  table {
+    border-collapse: collapse; 
+    width: 100%;
+    background-color: white;
+  }
+
+  th, td {
+    width: 20%;
+    border: 1px solid #8fcae7;
+    padding: 8px;
+    text-align: left;
+  }
+
+  html, body {
+    margin: 0;
+    padding: 0;
+  }
+
+</style>
+</head>
+<body>
+  <header class="main-header">
+    <div style="display: flex; align-items: center; padding-top: 0; padding-bottom: 20px; margin-left: 10px;">
+      <img class="logo-img-header" src="{{ url_for('static', filename='Logo_rijksoverheid.svg.png') }}" alt="Logo Rijksoverheid">
+      <p style="margin-left: 10px; font-size: 14px; font-family: 'Times New Roman', Times, serif, sans-serif; margin-top: 60px; text-align: left;">Master Thesis <br>Benjamin Mertens</p>
+    </div>
+  </header>
+  <div class="menu-bar" style="display: flex; justify-content: space-between; align-items: center;">
+    <h3 style="margin-left: -15px;">MASTER THESIS: ELEKTRONISCH BETAALVERKEER EN VENNOOTSCHAPSBELASTING</h3>
+    <h3>V.D. PASCH B.V.<span> is ingelogd</span></h3>
+  </div>
+  <main>
+    <div class="container">
+      <div class="upper-box">
+        <h2 style="text-align: center; font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;">Simuleer een <u>uitgaande</u> transactie</h2>
+        <div class="form-and-result-container">
+          <div class="form-container">
+            <form method="POST">
+              <label for="transactie_type">Wat voor transactie wil je simuleren?</label><br>
+              <select id="transactie_type" name="transactie_type" onchange="toggleFields()">
+                <option value=" "> </option>
+                <option value="aankoop_zonder_afschrijving">Aankoop zonder afschrijving</option>
+                <option value="aankoop_met_afschrijving">Aankoop met afschrijving</option>
+                <option value="Onttrekking">Onttrekking door aandeelhouder</option>
+              </select><br>
+        
+              <!-- Deze velden worden pas getoond nadat een transactietype is gekozen -->
+              <div id="transactie_fields" style="display: none;">
+                <label for="transactie_bedrag">Transactie bedrag:</label><br>
+                <input placeholder="0,00" type="text" id="transactie_bedrag" name="transactie_bedrag"><br>
+                <label for="btw_percentage">BTW percentage:</label>
+                <select id="btw_percentage" name="btw_percentage">
+                  <option value="21%">21%</option>
+                  <option value="9%">9%</option>
+                  <option value="0%">0%</option>
+                  <option value="Vrijgesteld">Vrijgesteld</option>
+                </select>
+                <div id="afschrijving_fields" style="display: none;">
+                  <label for="restwaarde">Restwaarde:</label><br>
+                  <input placeholder="0,00" type="text" id="restwaarde" name="restwaarde"><br>
+                  <label for="aantal_jaren">Aantal jaren:</label><br>
+                  <input placeholder="0" type="text" id="aantal_jaren" name="aantal_jaren"><br>
+                </div><br>
+                <button class="button" type="submit">Bereken</button>
+              </div>
+            </form>
+          </div>
+          <div class="result-container">
+            {% if session['laatste_transactie'] %}
+            <h4>Laatst gegenereerde transactie:</h4>
+            <p style="font-style:italic;">{{ session['laatste_transactie']['mededeling'] }}</p>
+            {% endif %}
+          </div>
+        </div>
+      </div>
+      <div class="upper-box">
+        <h2 style="text-align: center; font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;">Simuleer een <u>inkomende</u> transactie</h2>
+        <div class="form-and-result-container">
+          <div class="form-container">
+            <form method="POST" action="{{ url_for('verkoop') }}">
+              <label for="verkoop_type">Wat voor transactie wil je simuleren?</label><br>
+              <select id="verkoop_type" name="verkoop_type" onchange="toggleVerkoopFields()">
+                <option value=" "> </option>
+                <option value="verkoop_zonder_afschrijving">Verkoop zonder afschrijving</option>
+                <option value="verkoop_met_afschrijving">Verkoop met afschrijving</option>
+                <option value="storting">Storting door aandeelhouder</option>
+              </select><br>
+            
+              <!-- Deze velden worden pas getoond nadat een transactietype is gekozen -->
+              <div id="verkoop_fields" style="display: none;">
+                <label for="verkoop_bedrag">Transactie bedrag:</label><br>
+                <input placeholder="0,00" type="text" id="verkoop_bedrag" name="verkoop_bedrag"><br>
+                <label for="verkoop_btw_percentage" id="verkoop_btw_label">BTW percentage:</label>
+                <select id="verkoop_btw_percentage" name="verkoop_btw_percentage">
+                  <option value="21%">21%</option>
+                  <option value="9%">9%</option>
+                  <option value="0%">0%</option>
+                  <option value="Vrijgesteld">Vrijgesteld</option>
+                </select>
+                <div id="verkoop_afschrijving_fields" style="display: none;">
+                  <label for="verkoop_restwaarde">Restwaarde:</label><br>
+                  <input placeholder="0,00" type="text" id="verkoop_restwaarde" name="verkoop_restwaarde"><br>
+                  <label for="verkoop_aantal_jaren">Aantal jaren:</label><br>
+                  <input placeholder="0" type="text" id="verkoop_aantal_jaren" name="verkoop_aantal_jaren"><br>
+                </div><br>
+                <button class="button" type="submit">Bereken</button>
+              </div>
+            </form>
+          </div>
+          <div class="result-container">
+            {% if session['laatste_verkoop'] %}
+              <h4>Laatst gegenereerde verkoop:</h4>
+              <p style="font-style:italic;">{{ session['laatste_verkoop']['mededeling'] }}</p>
+            {% endif %}
+          </div>
+        </div>
+      </div>      
+    </div>
+    <div class="container">
+      <div class="lower-box">
+        <h2 style="text-align: center; font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; color: #154273 ;">Zicht vanuit Belastingdienst</h2>
+        <h4 style="color: #154273d5; margin-bottom: 5px; font-family: Verdana, Geneva, Tahoma, sans-serif">Uitgaande transacties</h4>
+        {% if transacties %}
+        <table>
+          <thead>
+            <tr>
+                <th>BTW-ID Verkoper</th>
+                <th>Transactiecode</th>
+                <th>BTW Percentage</th>
+                <th>Prijs exclusief BTW</th>
+                <th>Restwaarde</th>
+                <th>Afschrijvingstermijn</th>
+                <th>Jaarlijks afschrijvingsbedrag</th>
+            </tr>
+          </thead>
+          <tbody>
+            {% for transactie in transacties %}
+            <tr>
+                <td>{{ transactie.btw_id }}</td>
+                <td>{{ transactie.mededeling }}</td>
+                <td>{{ transactie.btw_percentage }}</td>
+                <td>{{ transactie.exclusief_btw }}</td>
+                <td>{{ transactie.restwaarde }}</td>
+                <td>{{ transactie.afschrijvingstermijn }}</td>
+                <td>{{ transactie.jaarlijkse_afschrijving }}</td>
+            </tr>
+            {% endfor %}
+          </tbody>
+          <tfoot>
+            <tr>
+              <td colspan="3">Totalen</td>
+              <td>{% set total_btw = [] %}
+                {% for transactie in transacties %}
+                    {% set _ = total_btw.append(transactie.exclusief_btw | float) %}
+                {% endfor %}
+                {{ total_btw | sum | round(2) }}</td>
+              <td>{% set total_restwaarde = [] %}
+                {% for transactie in transacties %}
+                    {% set _ = total_restwaarde.append(transactie.restwaarde | float) %}
+                {% endfor %}
+                {{ total_restwaarde | sum | round(2) }}</td>
+              <td>{% set total_afschrijvingstermijn = [] %}
+                {% for transactie in transacties %}
+                    {% set _ = total_afschrijvingstermijn.append(transactie.afschrijvingstermijn | float) %}
+                {% endfor %}
+                {{ (total_afschrijvingstermijn | sum / (total_afschrijvingstermijn | length)) | round }}</td>
+              <td>{% set total_jaarlijkse_afschrijving = [] %}
+                {% for transactie in transacties %}
+                    {% set _ = total_jaarlijkse_afschrijving.append(transactie.jaarlijkse_afschrijving | float) %}
+                {% endfor %}
+                {{ total_jaarlijkse_afschrijving | sum | round(2) }}</td>            
+            </tr>
+          </tfoot>                 
+        </table>
+        {% else %}
+        <p>Er zijn nog geen aankooptransacties.</p>
+        {% endif %}
+        <h4 style="color: #154273d5; margin-bottom: 5px; font-family: Verdana, Geneva, Tahoma, sans-serif;">Inkomende transacties</h4>
+        {% if verkoop_transacties %}
+        <table>
+          <tr>
+            <th>BTW-ID Koper</th>
+            <th>Transactiecode</th>
+            <th>BTW Percentage</th>
+            <th>Prijs exclusief BTW</th>
+            <th>Restwaarde</th>
+            <th>Afschrijvingstermijn</th>
+            <th>Jaarlijks afschrijvingsbedrag</th>
+          </tr>
+          {% for verkoop in verkoop_transacties %}
+          <tr>
+            <td>{{ verkoop.btw_id }}</td>
+            <td>{{ verkoop.mededeling }}</td>
+            <td>{{ verkoop.btw_percentage }}</td>
+            <td>{{ verkoop.exclusief_btw }}</td>
+            <td>{{ verkoop.restwaarde }}</td>
+            <td>{{ verkoop.afschrijvingstermijn }}</td>
+            <td>{{ verkoop.jaarlijkse_afschrijving }}</td>
+          </tr>
+          {% endfor %}
+          <tfoot>
+            <tr>
+              <td colspan="3">Totalen</td>
+              <td>{% set total_btw = [] %}
+                {% for verkoop in verkoop_transacties %}
+                    {% set _ = total_btw.append(verkoop.exclusief_btw | float) %}
+                {% endfor %}
+                {{ total_btw | sum | round(2) }}</td>
+              <td>{% set total_restwaarde = [] %}
+                {% for verkoop in verkoop_transacties %}
+                    {% set _ = total_restwaarde.append(verkoop.restwaarde | float) %}
+                {% endfor %}
+                {{ total_restwaarde | sum | round(2) }}</td>
+              <td>{% set total_afschrijvingstermijn = [] %}
+                {% for verkoop in verkoop_transacties %}
+                    {% set _ = total_afschrijvingstermijn.append(verkoop.afschrijvingstermijn | float) %}
+                {% endfor %}
+                {{ (total_afschrijvingstermijn | sum / (total_afschrijvingstermijn | length)) | round }}</td>
+              <td>{% set total_jaarlijkse_afschrijving = [] %}
+                {% for verkoop in verkoop_transacties %}
+                    {% set _ = total_jaarlijkse_afschrijving.append(verkoop.jaarlijkse_afschrijving | float) %}
+                {% endfor %}
+                {{ total_jaarlijkse_afschrijving | sum | round(2) }}</td>                       
+            </tr>
+          </tfoot>         
+        </table>
+        {% else %}
+          <p>Er zijn nog geen verkooptransacties.</p>
+        {% endif %}
+        <br>
+        <form action="/vooringevulde_aangifte" method="post">
+          <button id="simulate-button" type="button" class="btn btn-primary">Simuleer vooringevulde aangifte</button>
+        </form><br>        
+
+      <div id="vooringevulde-aangifte-container"></div>
+    </div>
+    
+    </div>
+
+    {% if session['aankoop_transacties'] and session['verkoop_transacties'] %}
+  <div>
+    <h2>Vooringevulde Aangifte</h2>
+    <p>Totale inkomsten: {{ session['totale_inkomsten'] }}</p>
+    <p>Totale uitgaven: {{ session['totale_uitgaven'] }}</p>
+  </div>
+{% endif %}
+
+  </main>
+  
+  <footer>
+    <p>Copyright © 2023 Benjamin Mertens</p>
+    <div style="width: 100%; display: flex; justify-content: center; align-items: center; padding-bottom: 0; margin: 0;">
+      <img class="logo-img-footer" src="{{ url_for('static', filename='Logo_onder_rijksoverheid.svg.png') }}" alt="Logo Rijksoverheid">
+    </div>
+  </footer>
+
+  <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+  <script>
+    function toggleFields() {
+      var type = document.getElementById('transactie_type').value;
+      var fields = document.getElementById('transactie_fields');
+      var afschrijvingFields = document.getElementById('afschrijving_fields');
+    
+      // Toon de velden als een transactietype is geselecteerd
+      if (type) {
+        fields.style.display = 'block';
+      } else {
+        fields.style.display = 'none';
+      }
+    
+      // Toon extra velden voor afschrijving als het transactietype 'aankoop met afschrijving' is
+      if (type === 'aankoop_met_afschrijving') {
+        afschrijvingFields.style.display = 'block';
+      } else {
+        afschrijvingFields.style.display = 'none';
+      }
+    }
+  function toggleVerkoopFields() {
+    var verkoopTypeSelect = document.getElementById("verkoop_type");
+    var verkoopFieldsDiv = document.getElementById("verkoop_fields");
+    var afschrijvingFieldsDiv = document.getElementById("verkoop_afschrijving_fields");
+
+    // Toon de extra velden als er een transactietype is geselecteerd
+    if (verkoopTypeSelect.value != " ") {
+      verkoopFieldsDiv.style.display = "block";
+
+      // Toon de afschrijvingsvelden alleen als er een afschrijvingstransactie is geselecteerd
+      if (verkoopTypeSelect.value == "verkoop_met_afschrijving") {
+        afschrijvingFieldsDiv.style.display = "block";
+      } else {
+        afschrijvingFieldsDiv.style.display = "none";
+      }
+    } else {
+      verkoopFieldsDiv.style.display = "none";
+    }
+  }
+
+  // Roep de functie op zodra de pagina is geladen, zodat de weergave van de velden correct wordt ingesteld
+  window.onload = function() {
+    toggleVerkoopFields();
+  };
+
+  $(document).ready(function(){
+  $("#simulate-button").click(function(){
+    $.ajax({
+      url: "/vooringevulde_aangifte",
+      type: "get",
+      success: function(response) {
+        $("#vooringevulde-aangifte-container").html(response);
+      },
+      error: function(xhr) {
+        // Do something with the error here
+      }
+    });
+  });
+});
+  </script>
+<script>
+  function toggleBtwField(transactieType) {
+    var btwField = document.getElementById("btw_percentage");
+    var btwLabel = document.querySelector("label[for=btw_percentage]");
+    if (transactieType === "Onttrekking") {
+      btwField.style.display = "none";
+      btwLabel.style.display = "none"; // Verberg het label
+    } else {
+      btwField.style.display = "block";
+      btwLabel.style.display = "block"; // Toon het label
+    }
+  }
+
+  function toggleVerkoopBtwField(verkoopType) {
+    var btwField = document.getElementById("verkoop_btw_percentage"); 
+    var btwLabel = document.getElementById("verkoop_btw_label");
+    if (verkoopType === "storting") {
+      btwField.style.display = "none";
+      btwLabel.style.display = "none"; 
+    } else {
+      btwField.style.display = "block";
+      btwLabel.style.display = "block"; 
+    }
+  }
+
+  function toggleFields() {
+    var transactieTypeSelect = document.getElementById("transactie_type");
+    var transactieFieldsDiv = document.getElementById("transactie_fields");
+    var afschrijvingFieldsDiv = document.getElementById("afschrijving_fields");
+
+    // Toon de extra velden als er een transactietype is geselecteerd
+    if (transactieTypeSelect.value != " ") {
+      transactieFieldsDiv.style.display = "block";
+
+      // Toon de afschrijvingsvelden alleen als er een afschrijvingstransactie is geselecteerd
+      if (transactieTypeSelect.value == "aankoop_met_afschrijving") {
+        afschrijvingFieldsDiv.style.display = "block";
+      } else {
+        afschrijvingFieldsDiv.style.display = "none";
+      }
+
+      // Roep de nieuwe functie aan om de BTW-percentages dropdown te controleren
+      toggleBtwField(transactieTypeSelect.value);
+    } else {
+      transactieFieldsDiv.style.display = "none";
+    }
+  }
+
+  function toggleVerkoopFields() {
+    var verkoopTypeSelect = document.getElementById("verkoop_type");
+    var verkoopFieldsDiv = document.getElementById("verkoop_fields");
+    var afschrijvingFieldsDiv = document.getElementById("verkoop_afschrijving_fields");
+
+    // Toon de extra velden als er een transactietype is geselecteerd
+    if (verkoopTypeSelect.value != " ") {
+      verkoopFieldsDiv.style.display = "block";
+
+      // Toon de afschrijvingsvelden alleen als er een afschrijvingstransactie is geselecteerd
+      if (verkoopTypeSelect.value == "verkoop_met_afschrijving") {
+        afschrijvingFieldsDiv.style.display = "block";
+      } else {
+        afschrijvingFieldsDiv.style.display = "none";
+      }
+
+      // Roep de nieuwe functie aan om de BTW-percentages dropdown te controleren
+      toggleVerkoopBtwField(verkoopTypeSelect.value);
+    } else {
+      verkoopFieldsDiv.style.display = "none";
+    }
+  }
+
+  // Roep de functie op zodra de pagina is geladen, zodat de weergave van de velden correct wordt ingesteld
+  window.onload = function() {
+    toggleFields();
+    toggleVerkoopFields();
+  };
+</script>
+
+</body>
+</html>
